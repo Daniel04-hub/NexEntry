@@ -66,6 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contact = $_POST['contact'] ?? '';
     $address = $_POST['address'] ?? '';
 
+    // Server-side Validation
+    if (empty($age) || empty($dob) || empty($contact) || empty($address)) {
+        echo json_encode(["status" => "error", "message" => "All fields are required"]);
+        exit;
+    }
+
     try {
         $updateResult = $mongo_collection->updateOne(
             ['user_id' => $user_id],

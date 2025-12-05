@@ -37,6 +37,26 @@ $(document).ready(function () {
         var contact = $('#contact').val();
         var address = $('#address').val();
 
+        // Validation
+        if (!age || !dob || !contact || !address) {
+            $('#message').html('<div class="alert alert-danger">Please fill in all fields.</div>');
+            return;
+        }
+
+        // Validate Age vs DOB
+        var dobDate = new Date(dob);
+        var today = new Date();
+        var calculatedAge = today.getFullYear() - dobDate.getFullYear();
+        var m = today.getMonth() - dobDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+            calculatedAge--;
+        }
+
+        if (parseInt(age) !== calculatedAge) {
+            $('#message').html('<div class="alert alert-danger">Age does not match Date of Birth! (Calculated: ' + calculatedAge + ')</div>');
+            return;
+        }
+
         $.ajax({
             url: 'php/profile.php',
             type: 'POST',
