@@ -1,0 +1,213 @@
+/* assets/css/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    /* Default Dark Mode */
+    --bg-color: #050505;
+    --card-bg: #121212;
+    --input-bg: #1e1e1e;
+    --text-color: #ffffff;
+    --text-muted: #a0a0a0;
+    --accent-color: #00ffcc;
+    --accent-gradient: linear-gradient(135deg, #00ffcc 0%, #00ccff 100%);
+    --border-color: #2a2a2a;
+}
+
+/* Light Mode Overrides */
+body.light-mode {
+    --bg-color: #f0f2f5;
+    --card-bg: #ffffff;
+    --input-bg: #f8f9fa;
+    --text-color: #333333;
+    --text-muted: #6c757d;
+    --accent-color: #764ba2;
+    --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --border-color: #e9ecef;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* The Card */
+.auth-container,
+.profile-container {
+    background: var(--card-bg);
+    border-radius: 30px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.profile-container {
+    max-width: 600px;
+}
+
+/* The Glow Effect (Top Left) */
+.auth-container::before,
+.profile-container::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--accent-color) 0%, rgba(0, 0, 0, 0) 70%);
+    filter: blur(40px);
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Content Wrapper to sit above glow */
+.auth-content {
+    position: relative;
+    z-index: 1;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+/* Inputs */
+.form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--text-color);
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.1);
+}
+
+.form-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+/* Standard Primary Button */
+.btn-primary {
+    background: var(--accent-gradient);
+    border: none;
+    border-radius: 25px;
+    padding: 12px;
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: var(--accent-gradient);
+    opacity: 0.9;
+    color: #fff;
+}
+
+/* Links */
+.footer-link {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.footer-link a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Navbar */
+.navbar {
+    background: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    transition: background 0.3s ease;
+}
+
+.navbar-brand,
+.nav-link {
+    color: var(--text-color) !important;
+}
+
+/* Theme Toggle Button */
+#themeToggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, background 0.3s, color 0.3s;
+    z-index: 1000;
+}
+
+#themeToggle:hover {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Let's Start Button */
+.btn-start {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000;
+    background: var(--accent-gradient);
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 255, 204, 0.3);
+    color: #000;
+}
+
+.arrow-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-start:hover .arrow-icon {
+    transform: translateX(5px);
+}
