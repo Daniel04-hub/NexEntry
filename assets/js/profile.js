@@ -28,6 +28,14 @@ $(document).ready(function () {
         }
     });
 
+    // Set Max Date to Today
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    todayStr = yyyy + '-' + mm + '-' + dd;
+    $('#dob').attr('max', todayStr);
+
     // Update Profile
     $('#profileForm').on('submit', function (e) {
         e.preventDefault();
@@ -46,6 +54,12 @@ $(document).ready(function () {
         // Validate Age vs DOB
         var dobDate = new Date(dob);
         var today = new Date();
+
+        if (dobDate > today) {
+            $('#message').html('<div class="alert alert-danger">Date of Birth cannot be in the future!</div>');
+            return;
+        }
+
         var calculatedAge = today.getFullYear() - dobDate.getFullYear();
         var m = today.getMonth() - dobDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
@@ -53,7 +67,7 @@ $(document).ready(function () {
         }
 
         if (parseInt(age) !== calculatedAge) {
-            $('#message').html('<div class="alert alert-danger">Age does not match Date of Birth! (Calculated: ' + calculatedAge + ')</div>');
+            $('#message').html('<div class="alert alert-danger">Age (' + age + ') does not match Date of Birth! (Should be: ' + calculatedAge + ')</div>');
             return;
         }
 
