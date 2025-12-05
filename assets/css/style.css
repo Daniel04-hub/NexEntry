@@ -14,7 +14,7 @@
 }
 
 /* Light Mode Overrides */
-body.light-mode {
+html.light-mode {
     --bg-color: #f0f2f5;
     --card-bg: #ffffff;
     --input-bg: #f8f9fa;
