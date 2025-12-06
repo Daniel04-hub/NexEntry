@@ -3,9 +3,8 @@
 require __DIR__ . '/../vendor/autoload.php'; // Ensure Composer autoload is loaded
 
 try {
-    // REPLACE with your MongoDB Atlas Connection String
-    // Example: mongodb+srv://<user>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority
-    $mongo_uri = "mongodb+srv://naveendaniel2004_db_user:qzuUgWGOEpD1tiAF@guvi.xexybyb.mongodb.net/?appName=guvi";
+    // Local MongoDB Connection
+    $mongo_uri = "mongodb://localhost:27017";
 
     $mongo_client = new MongoDB\Client($mongo_uri);
     $mongo_db = $mongo_client->guvi_db;

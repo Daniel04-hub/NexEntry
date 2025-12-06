@@ -1,9 +1,9 @@
 <?php
 // php/db_mysql.php
 
-$servername = "localhost"; // Or your Cloud MySQL Host
-$username = "root";        // Or your Cloud MySQL Username
-$password = "rgns2004";            // Or your Cloud MySQL Password
+$servername = "127.0.0.1";
+$username = "guvi_user";
+$password = "password123";
 $dbname = "guvi_db";
 
 // Create connection
