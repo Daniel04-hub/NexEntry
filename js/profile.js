@@ -1,12 +1,20 @@
+
+(function () {
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+        document.documentElement.classList.add('light-mode');
+    }
+})();
+
 $(document).ready(function () {
-    // Check for token
+
     var token = localStorage.getItem('session_token');
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
 
-    // Load Profile Data
+
     $.ajax({
         url: 'php/profile.php',
         type: 'GET',
@@ -18,40 +26,52 @@ $(document).ready(function () {
             if (response.status === 'success' && response.data) {
                 $('#age').val(response.data.age);
                 $('#dob').val(response.data.dob);
-                $('#contact').val(response.data.contact);
+
+                // Parse Contact (Country Code + Number)
+                var fullContact = response.data.contact || '';
+                var contactParts = fullContact.split(' ');
+                if (contactParts.length > 1) {
+                    $('#countryCode').val(contactParts[0]);
+                    $('#contact').val(contactParts.slice(1).join(''));
+                } else {
+                    $('#contact').val(fullContact);
+                }
+
                 $('#address').val(response.data.address);
             } else if (response.status === 'error') {
-                // Token invalid
+
                 localStorage.removeItem('session_token');
                 window.location.href = 'login.html';
             }
         }
     });
 
-    // Set Max Date to Today
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
     var yyyy = today.getFullYear();
     todayStr = yyyy + '-' + mm + '-' + dd;
     $('#dob').attr('max', todayStr);
 
-    // Update Profile
+
     $('#profileForm').on('submit', function (e) {
         e.preventDefault();
 
         var age = $('#age').val();
         var dob = $('#dob').val();
-        var contact = $('#contact').val();
+        var countryCode = $('#countryCode').val();
+        var contactNumber = $('#contact').val();
         var address = $('#address').val();
 
-        // Validation
-        if (!age || !dob || !contact || !address) {
+
+
+        if (!age || !dob || !contactNumber || !address) {
             $('#message').html('<div class="alert alert-danger">Please fill in all fields.</div>');
             return;
         }
 
-        // Validate Age vs DOB
+
         var dobDate = new Date(dob);
         var today = new Date();
 
@@ -71,6 +91,13 @@ $(document).ready(function () {
             return;
         }
 
+        // Contact Validation
+        if (!/^\d{7,15}$/.test(contactNumber)) {
+            $('#message').html('<div class="alert alert-danger">Invalid Contact Number! Must be 7-15 digits.</div>');
+            return;
+        }
+        var fullContact = countryCode + ' ' + contactNumber;
+
         $.ajax({
             url: 'php/profile.php',
             type: 'POST',
@@ -78,10 +105,10 @@ $(document).ready(function () {
                 'Authorization': 'Bearer ' + token
             },
             data: {
-                token: token, // Fallback if headers fail
+                token: token,
                 age: age,
                 dob: dob,
-                contact: contact,
+                contact: fullContact,
                 address: address
             },
             dataType: 'json',
@@ -95,9 +122,39 @@ $(document).ready(function () {
         });
     });
 
-    // Logout
+
     $('#logoutBtn').click(function () {
         localStorage.removeItem('session_token');
         window.location.href = 'login.html';
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggleBtn.querySelector('i');
+
+
+    if (html.classList.contains('light-mode')) {
+        icon.classList.remove('bi-moon-fill');
+        icon.classList.add('bi-sun-fill');
+    } else {
+        icon.classList.remove('bi-sun-fill');
+        icon.classList.add('bi-moon-fill');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        html.classList.toggle('light-mode');
+
+        if (html.classList.contains('light-mode')) {
+            localStorage.setItem('theme', 'light');
+            icon.classList.remove('bi-moon-fill');
+            icon.classList.add('bi-sun-fill');
+        } else {
+            localStorage.setItem('theme', 'dark');
+            icon.classList.remove('bi-sun-fill');
+            icon.classList.add('bi-moon-fill');
+        }
     });
 });

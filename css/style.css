@@ -1,8 +1,6 @@
-/* assets/css/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root {
-    /* Default Dark Mode */
     --bg-color: #050505;
     --card-bg: #121212;
     --input-bg: #1e1e1e;
@@ -13,7 +11,6 @@
     --border-color: #2a2a2a;
 }
 
-/* Light Mode Overrides */
 html.light-mode {
     --bg-color: #f0f2f5;
     --card-bg: #ffffff;
@@ -35,9 +32,11 @@ body {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* The Card */
 .auth-container,
 .profile-container {
     background: var(--card-bg);
@@ -50,13 +49,13 @@ body {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--border-color);
     transition: background 0.3s ease, border-color 0.3s ease;
+    z-index: 10;
 }
 
 .profile-container {
     max-width: 600px;
 }
 
-/* The Glow Effect (Top Left) */
 .auth-container::before,
 .profile-container::before {
     content: '';
@@ -72,7 +71,6 @@ body {
     pointer-events: none;
 }
 
-/* Content Wrapper to sit above glow */
 .auth-content {
     position: relative;
     z-index: 1;
@@ -92,7 +90,6 @@ h2 {
     margin-bottom: 2rem;
 }
 
-/* Inputs */
 .form-control {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
@@ -117,7 +114,6 @@ h2 {
     margin-bottom: 5px;
 }
 
-/* Standard Primary Button */
 .btn-primary {
     background: var(--accent-gradient);
     border: none;
@@ -134,7 +130,6 @@ h2 {
     color: #fff;
 }
 
-/* Links */
 .footer-link {
     text-align: center;
     margin-top: 30px;
@@ -148,22 +143,6 @@ h2 {
     font-weight: bold;
 }
 
-/* Navbar */
-.navbar {
-    background: var(--card-bg) !important;
-    border-bottom: 1px solid var(--border-color);
-    width: 100%;
-    position: fixed;
-    top: 0;
-    transition: background 0.3s ease;
-}
-
-.navbar-brand,
-.nav-link {
-    color: var(--text-color) !important;
-}
-
-/* Theme Toggle Button */
 #themeToggle {
     position: absolute;
     top: 20px;
@@ -183,7 +162,6 @@ h2 {
     transform: rotate(15deg) scale(1.1);
 }
 
-/* Let's Start Button */
 .btn-start {
     display: inline-flex;
     align-items: center;
@@ -210,4 +188,68 @@ h2 {
 
 .btn-start:hover .arrow-icon {
     transform: translateX(5px);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+}
+
+
+@media (max-width: 768px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .auth-container,
+    .profile-container {
+        padding: 40px 25px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .btn-start {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    #themeToggle {
+        top: 15px;
+        right: 15px;
+    }
 }

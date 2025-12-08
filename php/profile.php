@@ -1,10 +1,25 @@
 <?php
-// php/profile.php
-header('Content-Type: application/json');
-require 'db_mongo.php';
-require 'db_redis.php';
 
-// Helper to get token from headers or POST
+header('Content-Type: application/json');
+
+
+try {
+    $redis = new Redis();
+    $redis->connect('127.0.0.1', 6379);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Redis Connection Error: " . $e->getMessage()]);
+    exit;
+}
+
+
+try {
+
+    $mongo_manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
+} catch (Exception $e) {
+    die(json_encode(["status" => "error", "message" => "MongoDB Connection Error: " . $e->getMessage()]));
+}
+
+
 function get_bearer_token()
 {
     $headers = getallheaders();
@@ -23,7 +38,7 @@ if (!$token) {
     exit;
 }
 
-// Verify Token in Redis
+
 try {
     $session_data_json = $redis->get("session:" . $token);
 
@@ -40,15 +55,21 @@ try {
     exit;
 }
 
-// Handle GET Request (Fetch Profile)
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
-        $profile = $mongo_collection->findOne(['user_id' => $user_id]);
 
-        if ($profile) {
-            // Convert BSONDocument to array
+        $filter = ['user_id' => $user_id];
+        $query = new MongoDB\Driver\Query($filter);
+
+
+        $cursor = $mongo_manager->executeQuery('guvi_db.user_profiles', $query);
+        $profiles = $cursor->toArray();
+
+        if (!empty($profiles)) {
+            $profile = $profiles[0];
             $profile_array = (array) $profile;
-            // Remove internal MongoDB ID for cleaner output
+
             unset($profile_array['_id']);
             echo json_encode(["status" => "success", "data" => $profile_array]);
         } else {
@@ -59,35 +80,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
-// Handle POST Request (Update Profile)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $age = $_POST['age'] ?? '';
     $dob = $_POST['dob'] ?? '';
     $contact = $_POST['contact'] ?? '';
     $address = $_POST['address'] ?? '';
 
-    // Server-side Validation
     if (empty($age) || empty($dob) || empty($contact) || empty($address)) {
         echo json_encode(["status" => "error", "message" => "All fields are required"]);
         exit;
     }
 
     try {
-        $updateResult = $mongo_collection->updateOne(
+
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->update(
             ['user_id' => $user_id],
             [
                 '$set' => [
-                    'user_id' => $user_id, // Ensure user_id is set
+                    'user_id' => $user_id,
                     'age' => $age,
                     'dob' => $dob,
                     'contact' => $contact,
                     'address' => $address
                 ]
             ],
-            ['upsert' => true] // Create if not exists
+            ['multi' => false, 'upsert' => true]
         );
 
-        if ($updateResult->getModifiedCount() > 0 || $updateResult->getUpsertedCount() > 0) {
+        $result = $mongo_manager->executeBulkWrite('guvi_db.user_profiles', $bulk);
+
+        if ($result->getModifiedCount() > 0 || $result->getUpsertedCount() > 0) {
             echo json_encode(["status" => "success", "message" => "Profile updated successfully"]);
         } else {
             echo json_encode(["status" => "success", "message" => "No changes made"]);

@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/register.js"></script>
 </head>
 
 <body>
@@ -28,9 +30,16 @@
                     <label class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" placeholder="username@gmail.com" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="bi bi-eye-slash-fill"></i>
+                        </button>
+                    </div>
+                    <small id="passwordStrength" class="form-text mt-1 d-block fw-bold"></small>
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-3">Register</button>
@@ -44,9 +53,6 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/theme.js"></script>
-    <script src="js/register.js"></script>
 </body>
 
 </html>

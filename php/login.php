@@ -1,8 +1,31 @@
 <?php
-// php/login.php
+
 header('Content-Type: application/json');
-require 'db_mysql.php';
-require 'db_redis.php';
+
+
+$servername = "127.0.0.1";
+$username = "guvi_user";
+$password = "password123";
+$dbname = "guvi_db";
+
+try {
+    $mysql_conn = new mysqli($servername, $username, $password, $dbname);
+} catch (Exception $e) {
+    die(json_encode(["status" => "error", "message" => "MySQL Connection Failed: " . $e->getMessage()]));
+}
+
+if ($mysql_conn->connect_error) {
+    die(json_encode(["status" => "error", "message" => "MySQL Connection Failed: " . $mysql_conn->connect_error]));
+}
+
+
+try {
+    $redis = new Redis();
+    $redis->connect('127.0.0.1', 6379);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Redis Connection Error: " . $e->getMessage()]);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
@@ -13,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Verify User
+
     $stmt = $mysql_conn->prepare("SELECT id, username, password_hash FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -23,10 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (password_verify($password, $row['password_hash'])) {
             // Login Success
 
-            // Generate Session Token
+
+
             $session_token = bin2hex(random_bytes(32));
 
-            // Store in Redis (Key: session_token, Value: User Data, TTL: 30 mins)
+
             $session_data = json_encode([
                 "user_id" => $row['id'],
                 "username" => $row['username'],
@@ -34,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             try {
-                $redis->setex("session:" . $session_token, 1800, $session_data); // 1800 seconds = 30 mins
+                $redis->setex("session:" . $session_token, 1800, $session_data);
 
                 echo json_encode([
                     "status" => "success",
