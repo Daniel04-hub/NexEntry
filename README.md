@@ -3,7 +3,7 @@
 Welcome to **NexEntry**! This is a comprehensive User Authentication & Profile Management System I built to demonstrate a full-stack PHP application.
 
 ### About The Project
-I wanted to create a login system that isn't just secure but also feels great to use. NexEntry handles the core flows of **Registration**, **Login**, and **Profile Management** seamlessly. It's designed with a modern, responsive UI that adapts to your preference (Dark Mode included! 🌙).
+I wanted to create a login system that isn't just secure but also feels great to use. NexEntry handles the core flows of **Registration**, **Login**, and **Profile Management** seamlessly. It's designed with a modern, responsive UI that adapts to your preference (Dark Mode included! ).
 
 ### How It Works
 Under the hood, I'm using a hybrid database approach to showcase different technologies:
