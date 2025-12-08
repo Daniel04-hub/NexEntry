@@ -10,7 +10,7 @@ $dbname = "guvi_db";
 
 try {
     $mysql_conn = new mysqli($servername, $username, $password, $dbname);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     die(json_encode(["status" => "error", "message" => "MySQL Connection Failed: " . $e->getMessage()]));
 }
 

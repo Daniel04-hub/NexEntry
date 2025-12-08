@@ -1,3 +1,4 @@
+/* assets/css/style.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 :root {
@@ -11,6 +12,7 @@
     --border-color: #2a2a2a;
 }
 
+/* Light Mode Overrides */
 html.light-mode {
     --bg-color: #f0f2f5;
     --card-bg: #ffffff;
@@ -37,6 +39,7 @@ body {
     box-sizing: border-box;
 }
 
+/* The Card */
 .auth-container,
 .profile-container {
     background: var(--card-bg);
@@ -56,6 +59,7 @@ body {
     max-width: 600px;
 }
 
+/* The Glow Effect (Top Left) */
 .auth-container::before,
 .profile-container::before {
     content: '';
@@ -71,6 +75,7 @@ body {
     pointer-events: none;
 }
 
+/* Content Wrapper to sit above glow */
 .auth-content {
     position: relative;
     z-index: 1;
@@ -90,22 +95,79 @@ h2 {
     margin-bottom: 2rem;
 }
 
-.form-control {
+/* Inputs (Standard) */
+.form-control,
+.form-select {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 20px;
     color: var(--text-color);
     padding: 15px 20px;
     font-size: 0.95rem;
-    transition: background 0.3s, border-color 0.3s, color 0.3s;
+    transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
     background-color: var(--input-bg);
     border-color: var(--accent-color);
     color: var(--text-color);
     box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.1);
+    outline: none;
 }
+
+/* Placeholder Styling */
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--text-color);
+    opacity: 0.4;
+    /* Make it significantly lighter */
+}
+
+
+
+/* --- International Tel Input Overrides --- */
+.iti {
+    width: 100%;
+}
+
+.iti__country-list {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+    white-space: normal;
+}
+
+/* Individual Country Item */
+.iti__country {
+    transition: background 0.2s;
+    color: var(--text-color);
+}
+
+/* Hover & Active/Highlight State */
+.iti__country:hover,
+.iti__country.iti__highlight {
+    background-color: var(--input-bg) !important;
+    color: var(--text-color) !important;
+}
+
+/* Text Colors */
+.iti__country-name,
+.iti__flag-box {
+    color: var(--text-color) !important;
+    margin-right: 8px;
+}
+
+.iti__dial-code {
+    color: var(--text-muted) !important;
+}
+
+/* Selected Flag container bg fix */
+.iti__selected-flag {
+    background-color: transparent !important;
+}
+
+
 
 .form-label {
     font-size: 0.8rem;
@@ -114,6 +176,7 @@ h2 {
     margin-bottom: 5px;
 }
 
+/* Standard Primary Button */
 .btn-primary {
     background: var(--accent-gradient);
     border: none;
@@ -130,6 +193,7 @@ h2 {
     color: #fff;
 }
 
+/* Links */
 .footer-link {
     text-align: center;
     margin-top: 30px;
@@ -137,12 +201,31 @@ h2 {
     color: var(--text-muted);
 }
 
-.footer-link a {
-    color: var(--accent-color);
-    text-decoration: none;
+
+/* Navbar Fixes (Light/Dark Mode) */
+.navbar-brand {
+    color: var(--text-color) !important;
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
+/* Custom Logout Button */
+#logoutBtn {
+    border: 2px solid var(--accent-color) !important;
+    color: var(--text-color) !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+#logoutBtn:hover {
+    background: var(--accent-color) !important;
+    color: #000 !important;
+    /* Black text on hover for contrast */
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+}
+
+/* Theme Toggle Button */
 #themeToggle {
     position: absolute;
     top: 20px;
@@ -162,6 +245,7 @@ h2 {
     transform: rotate(15deg) scale(1.1);
 }
 
+/* Let's Start Button */
 .btn-start {
     display: inline-flex;
     align-items: center;
@@ -190,6 +274,7 @@ h2 {
     transform: translateX(5px);
 }
 
+/* Hero Section (Index Page) */
 .hero h1 {
     font-size: 3.5rem;
     font-weight: 700;
@@ -197,6 +282,7 @@ h2 {
     text-align: center;
     background: var(--accent-gradient);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -218,17 +304,21 @@ h2 {
 }
 
 
+/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
 
+    /* General Body Padding */
     body {
         padding: 15px;
     }
 
+    /* Adjust Card Padding */
     .auth-container,
     .profile-container {
         padding: 40px 25px;
     }
 
+    /* Hero Text Sizing */
     .hero h1 {
         font-size: 2.5rem;
     }
@@ -237,6 +327,7 @@ h2 {
         font-size: 1rem;
     }
 
+    /* Button Sizing */
     .btn-start {
         width: 100%;
         justify-content: center;
@@ -248,6 +339,7 @@ h2 {
         font-size: 1.75rem;
     }
 
+    /* Adjust Toggle Position */
     #themeToggle {
         top: 15px;
         right: 15px;

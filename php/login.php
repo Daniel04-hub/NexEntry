@@ -20,9 +20,10 @@ if ($mysql_conn->connect_error) {
 
 
 try {
-    $redis = new Redis();
+    $redisClass = 'Redis';
+    $redis = new $redisClass();
     $redis->connect('127.0.0.1', 6379);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo json_encode(["status" => "error", "message" => "Redis Connection Error: " . $e->getMessage()]);
     exit;
 }
@@ -44,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['password_hash'])) {
-            // Login Success
 
 
 

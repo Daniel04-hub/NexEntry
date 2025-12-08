@@ -20,6 +20,18 @@ $(document).ready(function () {
         type: 'GET',
         headers: {
             'Authorization': 'Bearer ' + token
+        },
+        dataType: 'json',
+        success: function (response) {
+            if (response.status === 'success' && response.data) {
+                var data = response.data;
+                $('#age').val(data.age);
+                $('#dob').val(data.dob);
+                $('#address').val(data.address);
+                if (data.contact) {
+                    iti.setNumber(data.contact);
+                }
+            }
         }
     });
 
@@ -32,20 +44,32 @@ $(document).ready(function () {
     $('#dob').attr('max', todayStr);
 
 
+    const input = document.querySelector("#contact");
+    const iti = window.intlTelInput(input, {
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        preferredCountries: ["in", "us", "top", "au"],
+        separateDialCode: true,
+        initialCountry: "in"
+    });
+
     $('#profileForm').on('submit', function (e) {
         e.preventDefault();
 
         var age = $('#age').val();
         var dob = $('#dob').val();
-        var contact = $('#contact').val();
         var address = $('#address').val();
 
-
-        if (!age || !dob || !contact || !address) {
-            $('#message').html('<div class="alert alert-danger">Please fill in all fields.</div>');
+        if (!iti.isValidNumber()) {
+            $('#message').html('<div class="alert alert-danger">Please enter a valid phone number.</div>');
             return;
         }
 
+        var fullContact = iti.getNumber();
+
+        if (!age || !dob || !fullContact || !address) {
+            $('#message').html('<div class="alert alert-danger">Please fill in all fields.</div>');
+            return;
+        }
 
         var dobDate = new Date(dob);
         var today = new Date();
@@ -76,7 +100,7 @@ $(document).ready(function () {
                 token: token,
                 age: age,
                 dob: dob,
-                contact: contact,
+                contact: fullContact,
                 address: address
             },
             dataType: 'json',

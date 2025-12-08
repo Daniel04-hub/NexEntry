@@ -4,9 +4,10 @@ header('Content-Type: application/json');
 
 
 try {
-    $redis = new Redis();
+    $redisClass = 'Redis';
+    $redis = new $redisClass();
     $redis->connect('127.0.0.1', 6379);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo json_encode(["status" => "error", "message" => "Redis Connection Error: " . $e->getMessage()]);
     exit;
 }
@@ -14,8 +15,9 @@ try {
 
 try {
 
-    $mongo_manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
-} catch (Exception $e) {
+    $managerClass = 'MongoDB\Driver\Manager';
+    $mongo_manager = new $managerClass("mongodb://localhost:27017");
+} catch (Throwable $e) {
     die(json_encode(["status" => "error", "message" => "MongoDB Connection Error: " . $e->getMessage()]));
 }
 
@@ -50,7 +52,7 @@ try {
     $session_data = json_decode($session_data_json, true);
     $user_id = (int) $session_data['user_id'];
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo json_encode(["status" => "error", "message" => "Redis Error: " . $e->getMessage()]);
     exit;
 }
@@ -60,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
 
         $filter = ['user_id' => $user_id];
-        $query = new MongoDB\Driver\Query($filter);
+        $queryClass = 'MongoDB\Driver\Query';
+        $query = new $queryClass($filter);
 
 
         $cursor = $mongo_manager->executeQuery('guvi_db.user_profiles', $query);
@@ -75,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         } else {
             echo json_encode(["status" => "success", "data" => null, "message" => "No profile found"]);
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         echo json_encode(["status" => "error", "message" => "MongoDB Error: " . $e->getMessage()]);
     }
 }
@@ -94,7 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
 
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulkClass = 'MongoDB\Driver\BulkWrite';
+        $bulk = new $bulkClass;
         $bulk->update(
             ['user_id' => $user_id],
             [
@@ -116,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode(["status" => "success", "message" => "No changes made"]);
         }
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         echo json_encode(["status" => "error", "message" => "MongoDB Error: " . $e->getMessage()]);
     }
 }
