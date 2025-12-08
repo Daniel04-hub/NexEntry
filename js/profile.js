@@ -20,29 +20,6 @@ $(document).ready(function () {
         type: 'GET',
         headers: {
             'Authorization': 'Bearer ' + token
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.status === 'success' && response.data) {
-                $('#age').val(response.data.age);
-                $('#dob').val(response.data.dob);
-
-                // Parse Contact (Country Code + Number)
-                var fullContact = response.data.contact || '';
-                var contactParts = fullContact.split(' ');
-                if (contactParts.length > 1) {
-                    $('#countryCode').val(contactParts[0]);
-                    $('#contact').val(contactParts.slice(1).join(''));
-                } else {
-                    $('#contact').val(fullContact);
-                }
-
-                $('#address').val(response.data.address);
-            } else if (response.status === 'error') {
-
-                localStorage.removeItem('session_token');
-                window.location.href = 'login.html';
-            }
         }
     });
 
@@ -60,13 +37,11 @@ $(document).ready(function () {
 
         var age = $('#age').val();
         var dob = $('#dob').val();
-        var countryCode = $('#countryCode').val();
-        var contactNumber = $('#contact').val();
+        var contact = $('#contact').val();
         var address = $('#address').val();
 
 
-
-        if (!age || !dob || !contactNumber || !address) {
+        if (!age || !dob || !contact || !address) {
             $('#message').html('<div class="alert alert-danger">Please fill in all fields.</div>');
             return;
         }
@@ -91,13 +66,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Contact Validation
-        if (!/^\d{7,15}$/.test(contactNumber)) {
-            $('#message').html('<div class="alert alert-danger">Invalid Contact Number! Must be 7-15 digits.</div>');
-            return;
-        }
-        var fullContact = countryCode + ' ' + contactNumber;
-
         $.ajax({
             url: 'php/profile.php',
             type: 'POST',
@@ -108,7 +76,7 @@ $(document).ready(function () {
                 token: token,
                 age: age,
                 dob: dob,
-                contact: fullContact,
+                contact: contact,
                 address: address
             },
             dataType: 'json',
